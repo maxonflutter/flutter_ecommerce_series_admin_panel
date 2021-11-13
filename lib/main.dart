@@ -13,15 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'My eCommerce Backend',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: HomeScreen(),
-        getPages: [
-          GetPage(name: '/orders', page: () => const OrdersScreen()),
-          GetPage(name: '/products', page: () => ProductsScreen()),
-          GetPage(name: '/products/new', page: () => NewProductScreen()),
-        ]);
+      title: 'My eCommerce Backend',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomeScreen(),
+    );
   }
 }
