@@ -18,6 +18,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const HomeScreen(),
+      getPages: [
+        GetPage(name: '/products', page: () => ProductsScreen()),
+        GetPage(name: '/products/new', page: () => const NewProductScreen())
+      ],
     );
   }
 }
