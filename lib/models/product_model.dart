@@ -1,5 +1,7 @@
-import 'package:equatable/equatable.dart';
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
 class Product extends Equatable {
   final int id;
@@ -20,51 +22,84 @@ class Product extends Equatable {
     required this.imageUrl,
     required this.isRecommended,
     required this.isPopular,
-    this.price = 0.0,
-    this.quantity = 0,
+    required this.price,
+    required this.quantity,
   });
 
-  static Product fromSnapshot(DocumentSnapshot snap) {
-    Product product = Product(
-      id: snap['id'],
-      name: snap['name'],
-      description: snap['description'],
-      category: snap['category'],
-      imageUrl: snap['imageUrl'],
-      price: snap['price'],
-      quantity: snap['quantity'],
-      isRecommended: snap['isRecommended'],
-      isPopular: snap['isPopular'],
+  Product copyWith({
+    int? id,
+    String? name,
+    String? description,
+    String? category,
+    String? imageUrl,
+    bool? isRecommended,
+    bool? isPopular,
+    double? price,
+    int? quantity,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      category: category ?? this.category,
+      imageUrl: imageUrl ?? this.imageUrl,
+      isRecommended: isRecommended ?? this.isRecommended,
+      isPopular: isPopular ?? this.isPopular,
+      price: price ?? this.price,
+      quantity: quantity ?? this.quantity,
     );
-    return product;
   }
 
-  Map<String, dynamic> toDocument() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
       'description': description,
       'category': category,
       'imageUrl': imageUrl,
-      'price': price,
-      'quantity': quantity,
       'isRecommended': isRecommended,
       'isPopular': isPopular,
+      'price': price,
+      'quantity': quantity,
     };
   }
 
+  factory Product.fromMap(Map<String, dynamic> map) {
+    return Product(
+      id: map['id'],
+      name: map['name'],
+      description: map['description'],
+      category: map['category'],
+      imageUrl: map['imageUrl'],
+      isRecommended: map['isRecommended'],
+      isPopular: map['isPopular'],
+      price: map['price'],
+      quantity: map['quantity'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Product.fromJson(String source) =>
+      Product.fromMap(json.decode(source));
+
   @override
-  List<Object?> get props => [
-        id,
-        name,
-        description,
-        category,
-        imageUrl,
-        price,
-        quantity,
-        isRecommended,
-        isPopular,
-      ];
+  bool get stringify => true;
+
+  @override
+  List<Object> get props {
+    return [
+      id,
+      name,
+      description,
+      category,
+      imageUrl,
+      isRecommended,
+      isPopular,
+      price,
+      quantity,
+    ];
+  }
 
   static List<Product> products = [
     Product(
@@ -134,3 +169,58 @@ class Product extends Equatable {
     ),
   ];
 }
+
+
+  // Product({
+  //   required this.id,
+  //   required this.name,
+  //   required this.description,
+  //   required this.category,
+  //   required this.imageUrl,
+  //   required this.isRecommended,
+  //   required this.isPopular,
+  //   this.price = 0.0,
+  //   this.quantity = 0,
+  // });
+
+  // static Product fromSnapshot(DocumentSnapshot snap) {
+  //   Product product = Product(
+  //     id: snap['id'],
+  //     name: snap['name'],
+  //     description: snap['description'],
+  //     category: snap['category'],
+  //     imageUrl: snap['imageUrl'],
+  //     price: snap['price'],
+  //     quantity: snap['quantity'],
+  //     isRecommended: snap['isRecommended'],
+  //     isPopular: snap['isPopular'],
+  //   );
+  //   return product;
+  // }
+
+  // Map<String, dynamic> toDocument() {
+  //   return {
+  //     'id': id,
+  //     'name': name,
+  //     'description': description,
+  //     'category': category,
+  //     'imageUrl': imageUrl,
+  //     'price': price,
+  //     'quantity': quantity,
+  //     'isRecommended': isRecommended,
+  //     'isPopular': isPopular,
+  //   };
+  // }
+
+  // @override
+  // List<Object?> get props => [
+  //       id,
+  //       name,
+  //       description,
+  //       category,
+  //       imageUrl,
+  //       price,
+  //       quantity,
+  //       isRecommended,
+  //       isPopular,
+  //     ];
