@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_backend/models/product_model.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
