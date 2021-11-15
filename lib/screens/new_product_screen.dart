@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_backend/models/product_model.dart';
+import 'package:flutter_ecommerce_backend/services/database_service.dart';
+import 'package:flutter_ecommerce_backend/services/storage_service.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -9,6 +11,9 @@ class NewProductScreen extends StatelessWidget {
   NewProductScreen({Key? key}) : super(key: key);
 
   final ProductController productController = Get.find();
+
+  DatabaseService database = DatabaseService();
+  StorageService storage = StorageService();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +49,17 @@ class NewProductScreen extends StatelessWidget {
                             );
                           }
 
-                          if (_image != null) {}
+                          if (_image != null) {
+                            await storage.uploadImage(_image);
+
+                            var imageUrl =
+                                await storage.getDownloadURL(_image.name);
+                            productController.newProduct.update(
+                              'imageUrl',
+                              (_) => imageUrl,
+                              ifAbsent: () => imageUrl,
+                            );
+                          }
                         },
                         icon: const Icon(
                           Icons.add_circle,
@@ -120,7 +135,22 @@ class NewProductScreen extends StatelessWidget {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    print(productController.newProduct);
+                    database.addProduct(
+                      Product(
+                        id: int.parse(productController.newProduct['id']),
+                        name: productController.newProduct['name'],
+                        category: productController.newProduct['category'],
+                        description:
+                            productController.newProduct['description'],
+                        imageUrl: productController.newProduct['imageUrl'],
+                        isRecommended:
+                            productController.newProduct['isRecommended'],
+                        isPopular: productController.newProduct['isPopular'],
+                        price: productController.newProduct['price'],
+                        quantity:
+                            productController.newProduct['quantity'].toInt(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.black,
@@ -202,6 +232,7 @@ class NewProductScreen extends StatelessWidget {
             activeColor: Colors.black,
             inactiveColor: Colors.black12,
             onChanged: (value) {
+              print(value);
               productController.newProduct.update(
                 name,
                 (_) => value,

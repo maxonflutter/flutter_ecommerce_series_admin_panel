@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Product extends Equatable {
@@ -78,24 +79,21 @@ class Product extends Equatable {
     };
   }
 
-  factory Product.fromMap(Map<String, dynamic> map) {
+  factory Product.fromSnapshot(DocumentSnapshot snap) {
     return Product(
-      id: map['id'],
-      name: map['name'],
-      category: map['category'],
-      description: map['description'],
-      imageUrl: map['imageUrl'],
-      isRecommended: map['isRecommended'],
-      isPopular: map['isPopular'],
-      price: map['price'],
-      quantity: map['quantity'],
+      id: snap['id'],
+      name: snap['name'],
+      category: snap['category'],
+      description: snap['description'],
+      imageUrl: snap['imageUrl'],
+      isRecommended: snap['isRecommended'],
+      isPopular: snap['isPopular'],
+      price: snap['price'],
+      quantity: snap['quantity'],
     );
   }
 
   String toJson() => json.encode(toMap());
-
-  factory Product.fromJson(String source) =>
-      Product.fromMap(json.decode(source));
 
   @override
   bool get stringify => true;
