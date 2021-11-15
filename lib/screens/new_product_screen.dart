@@ -12,8 +12,8 @@ class NewProductScreen extends StatelessWidget {
 
   final ProductController productController = Get.find();
 
-  DatabaseService database = DatabaseService();
   StorageService storage = StorageService();
+  DatabaseService database = DatabaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +51,12 @@ class NewProductScreen extends StatelessWidget {
 
                           if (_image != null) {
                             await storage.uploadImage(_image);
-
                             var imageUrl =
                                 await storage.getDownloadURL(_image.name);
+
                             productController.newProduct.update(
-                              'imageUrl',
-                              (_) => imageUrl,
-                              ifAbsent: () => imageUrl,
-                            );
+                                'imageUrl', (_) => imageUrl,
+                                ifAbsent: () => imageUrl);
                           }
                         },
                         icon: const Icon(
@@ -232,7 +230,6 @@ class NewProductScreen extends StatelessWidget {
             activeColor: Colors.black,
             inactiveColor: Colors.black12,
             onChanged: (value) {
-              print(value);
               productController.newProduct.update(
                 name,
                 (_) => value,

@@ -83,8 +83,8 @@ class Product extends Equatable {
     return Product(
       id: snap['id'],
       name: snap['name'],
-      category: snap['category'],
       description: snap['description'],
+      category: snap['category'],
       imageUrl: snap['imageUrl'],
       isRecommended: snap['isRecommended'],
       isPopular: snap['isPopular'],
