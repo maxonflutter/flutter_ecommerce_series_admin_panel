@@ -16,4 +16,18 @@ class DatabaseService {
   Future<void> addProduct(Product product) {
     return _firebaseFirestore.collection('products').add(product.toMap());
   }
+
+  Future<void> updateField(
+    Product product,
+    String field,
+    dynamic newValue,
+  ) {
+    return _firebaseFirestore
+        .collection('products')
+        .where('id', isEqualTo: product.id)
+        .get()
+        .then((querySnapshot) => {
+              querySnapshot.docs.first.reference.update({field: newValue})
+            });
+  }
 }
