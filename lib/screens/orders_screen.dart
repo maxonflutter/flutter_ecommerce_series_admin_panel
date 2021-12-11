@@ -1,38 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_backend/controllers/order_controller.dart';
 import 'package:flutter_ecommerce_backend/models/models.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class OrdersScreen extends StatelessWidget {
-  const OrdersScreen({Key? key}) : super(key: key);
+  OrdersScreen({Key? key}) : super(key: key);
+
+  final OrderController orderController = Get.put(OrderController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Orders'),
-          backgroundColor: Colors.black,
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: Order.orders.length,
+      appBar: AppBar(
+        title: const Text('Orders'),
+        backgroundColor: Colors.black,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(
+              () => ListView.builder(
+                itemCount: orderController.pendingOrders.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return OrderCard(order: Order.orders[index]);
+                  return OrderCard(order: orderController.pendingOrders[index]);
                 },
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
 
 class OrderCard extends StatelessWidget {
-  final Order order;
-  const OrderCard({
+  OrderCard({
     Key? key,
     required this.order,
   }) : super(key: key);
+
+  final Order order;
+  final OrderController orderController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -163,21 +172,53 @@ class OrderCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  order.isAccepted
+                      ? ElevatedButton(
+                          onPressed: () {
+                            orderController.updateOrder(
+                              order,
+                              "isDelivered",
+                              !order.isDelivered,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.black,
+                            minimumSize: const Size(150, 40),
+                          ),
+                          child: const Text(
+                            'Deliver',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        )
+                      : ElevatedButton(
+                          onPressed: () {
+                            orderController.updateOrder(
+                              order,
+                              "isAccepted",
+                              !order.isAccepted,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.black,
+                            minimumSize: const Size(150, 40),
+                          ),
+                          child: const Text(
+                            'Accept',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
                   ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black,
-                      minimumSize: const Size(150, 40),
-                    ),
-                    child: const Text(
-                      'Accept',
-                      style: TextStyle(
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      orderController.updateOrder(
+                        order,
+                        "isCancelled",
+                        !order.isCancelled,
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.black,
                       minimumSize: const Size(150, 40),

@@ -12,6 +12,7 @@ class Order extends Equatable {
   final double total;
   final bool isAccepted;
   final bool isDelivered;
+  final bool isCancelled;
   final DateTime createdAt;
 
   const Order({
@@ -23,6 +24,7 @@ class Order extends Equatable {
     required this.total,
     required this.isAccepted,
     required this.isDelivered,
+    required this.isCancelled,
     required this.createdAt,
   });
 
@@ -35,6 +37,7 @@ class Order extends Equatable {
     double? total,
     bool? isAccepted,
     bool? isDelivered,
+    bool? isCancelled,
     DateTime? createdAt,
   }) {
     return Order(
@@ -46,6 +49,7 @@ class Order extends Equatable {
       total: total ?? this.total,
       isAccepted: isAccepted ?? this.isAccepted,
       isDelivered: isDelivered ?? this.isDelivered,
+      isCancelled: isCancelled ?? this.isCancelled,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -60,6 +64,7 @@ class Order extends Equatable {
       'total': total,
       'isAccepted': isAccepted,
       'isDelivered': isDelivered,
+      'isCancelled': isCancelled,
       'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
@@ -74,7 +79,8 @@ class Order extends Equatable {
       total: snap['total'],
       isAccepted: snap['isAccepted'],
       isDelivered: snap['isDelivered'],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(snap['createdAt']),
+      isCancelled: snap['isCancelled'],
+      createdAt: snap['createdAt'].toDate(),
     );
   }
 
@@ -94,6 +100,7 @@ class Order extends Equatable {
       total,
       isAccepted,
       isDelivered,
+      isCancelled,
       createdAt,
     ];
   }
@@ -108,6 +115,7 @@ class Order extends Equatable {
       total: 30,
       isAccepted: false,
       isDelivered: false,
+      isCancelled: false,
       createdAt: DateTime.now(),
     ),
     Order(
@@ -119,6 +127,7 @@ class Order extends Equatable {
       total: 30,
       isAccepted: false,
       isDelivered: false,
+      isCancelled: false,
       createdAt: DateTime.now(),
     ),
   ];
