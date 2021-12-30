@@ -30,6 +30,18 @@ class DatabaseService {
     });
   }
 
+  Future<List<OrderStats>> getOrderStats() {
+    return _firebaseFirestore
+        .collection('order_stats')
+        .orderBy('dateTime')
+        .get()
+        .then((querySnapshot) => querySnapshot.docs
+            .asMap()
+            .entries
+            .map((entry) => OrderStats.fromSnapshot(entry.value, entry.key))
+            .toList());
+  }
+
   Future<void> addProduct(Product product) {
     return _firebaseFirestore.collection('products').add(product.toMap());
   }

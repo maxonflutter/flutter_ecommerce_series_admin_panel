@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import '/controllers/controllers.dart';
 import '/screens/screens.dart';
+import '/models/models.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+
+  final OrderStatsController orderStatsController =
+      Get.put(OrderStatsController());
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +23,27 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            FutureBuilder(
+              future: orderStatsController.stats.value,
+              builder: (context, AsyncSnapshot<List<OrderStats>> snapshot) {
+                if (snapshot.hasData) {
+                  return Container(
+                    height: 250,
+                    padding: const EdgeInsets.all(10),
+                    child: CustomBarChart(
+                      orderStats: snapshot.data!,
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
+                );
+              },
+            ),
             Container(
               width: double.infinity,
               height: 150,
@@ -50,5 +78,28 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomBarChart extends StatelessWidget {
+  const CustomBarChart({
+    Key? key,
+    required this.orderStats,
+  }) : super(key: key);
+
+  final List<OrderStats> orderStats;
+  @override
+  Widget build(BuildContext context) {
+    List<charts.Series<OrderStats, String>> series = [
+      charts.Series(
+          id: "orders",
+          data: orderStats,
+          domainFn: (series, _) =>
+              DateFormat.d().format(series.dateTime).toString(),
+          measureFn: (series, _) => series.orders,
+          colorFn: (series, _) => series.barColor!)
+    ];
+
+    return charts.BarChart(series, animate: true);
   }
 }

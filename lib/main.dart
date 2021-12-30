@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: HomeScreen(),
       getPages: [
         GetPage(name: '/products', page: () => ProductsScreen()),
         GetPage(name: '/products/new', page: () => NewProductScreen()),
