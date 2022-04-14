@@ -1,8 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-
-import 'package:flutter_ecommerce_backend/models/models.dart';
 
 class Order extends Equatable {
   final int id;
@@ -11,6 +10,9 @@ class Order extends Equatable {
   final double deliveryFee;
   final double subtotal;
   final double total;
+  final bool isAccepted;
+  final bool isDelivered;
+  final bool isCancelled;
   final DateTime createdAt;
 
   const Order({
@@ -20,6 +22,9 @@ class Order extends Equatable {
     required this.deliveryFee,
     required this.subtotal,
     required this.total,
+    required this.isAccepted,
+    required this.isDelivered,
+    required this.isCancelled,
     required this.createdAt,
   });
 
@@ -30,6 +35,9 @@ class Order extends Equatable {
     double? deliveryFee,
     double? subtotal,
     double? total,
+    bool? isAccepted,
+    bool? isDelivered,
+    bool? isCancelled,
     DateTime? createdAt,
   }) {
     return Order(
@@ -39,6 +47,9 @@ class Order extends Equatable {
       deliveryFee: deliveryFee ?? this.deliveryFee,
       subtotal: subtotal ?? this.subtotal,
       total: total ?? this.total,
+      isAccepted: isAccepted ?? this.isAccepted,
+      isDelivered: isDelivered ?? this.isDelivered,
+      isCancelled: isCancelled ?? this.isCancelled,
       createdAt: createdAt ?? this.createdAt,
     );
   }
@@ -51,25 +62,29 @@ class Order extends Equatable {
       'deliveryFee': deliveryFee,
       'subtotal': subtotal,
       'total': total,
+      'isAccepted': isAccepted,
+      'isDelivered': isDelivered,
+      'isCancelled': isCancelled,
       'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
 
-  factory Order.fromMap(Map<String, dynamic> map) {
+  factory Order.fromSnapshot(DocumentSnapshot snap) {
     return Order(
-      id: map['id'],
-      customerId: map['customerId'],
-      productIds: map['productIds'],
-      deliveryFee: map['deliveryFee'],
-      subtotal: map['subtotal'],
-      total: map['total'],
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      id: snap['id'],
+      customerId: snap['customerId'],
+      productIds: List<int>.from(snap['productIds']),
+      deliveryFee: snap['deliveryFee'],
+      subtotal: snap['subtotal'],
+      total: snap['total'],
+      isAccepted: snap['isAccepted'],
+      isDelivered: snap['isDelivered'],
+      isCancelled: snap['isCancelled'],
+      createdAt: snap['createdAt'].toDate(),
     );
   }
 
   String toJson() => json.encode(toMap());
-
-  factory Order.fromJson(String source) => Order.fromMap(json.decode(source));
 
   @override
   bool get stringify => true;
@@ -83,6 +98,9 @@ class Order extends Equatable {
       deliveryFee,
       subtotal,
       total,
+      isAccepted,
+      isDelivered,
+      isCancelled,
       createdAt,
     ];
   }
@@ -95,24 +113,21 @@ class Order extends Equatable {
       deliveryFee: 10,
       subtotal: 20,
       total: 30,
+      isAccepted: false,
+      isDelivered: false,
+      isCancelled: false,
       createdAt: DateTime.now(),
     ),
     Order(
       id: 2,
-      customerId: 2345,
-      productIds: const [1, 2],
+      customerId: 23,
+      productIds: const [1, 2, 3],
       deliveryFee: 10,
-      subtotal: 20,
+      subtotal: 30,
       total: 30,
-      createdAt: DateTime.now(),
-    ),
-    Order(
-      id: 3,
-      customerId: 2345,
-      productIds: const [1, 2],
-      deliveryFee: 10,
-      subtotal: 20,
-      total: 30,
+      isAccepted: false,
+      isDelivered: false,
+      isCancelled: false,
       createdAt: DateTime.now(),
     ),
   ];

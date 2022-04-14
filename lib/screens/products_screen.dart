@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce_backend/controllers/product_controller.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '/models/models.dart';
 import '/screens/screens.dart';
+import '/controllers/controllers.dart';
 
 class ProductsScreen extends StatelessWidget {
   ProductsScreen({Key? key}) : super(key: key);
 
-  final ProductController productController = Get.put(
-    ProductController(),
-  );
+  final ProductController productController = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -23,28 +22,71 @@ class ProductsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            _buildAddNewProduct(),
-            Obx(
-              () => Expanded(
-                child: ListView.builder(
+            SizedBox(
+              height: 100,
+              child: Card(
+                margin: EdgeInsets.zero,
+                color: Colors.black,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Get.to(() => NewProductScreen());
+                      },
+                      icon: const Icon(
+                        Icons.add_circle,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Text(
+                      'Add a New Product',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Obx(
+                () => ListView.builder(
                   itemCount: productController.products.length,
                   itemBuilder: (context, index) {
                     return SizedBox(
                       height: 210,
-                      child: _buildProductCard(
-                          index, productController.products[index]),
+                      child: ProductCard(
+                        product: productController.products[index],
+                        index: index,
+                      ),
                     );
                   },
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
     );
   }
+}
 
-  Card _buildProductCard(int index, Product product) {
+class ProductCard extends StatelessWidget {
+  final Product product;
+  final int index;
+
+  ProductCard({
+    Key? key,
+    required this.product,
+    required this.index,
+  }) : super(key: key);
+
+  final ProductController productController = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(top: 10),
       child: Padding(
@@ -109,6 +151,10 @@ class ProductsScreen extends StatelessWidget {
                                   value,
                                 );
                               },
+                              onChangeEnd: (value) {
+                                productController.saveNewProductPrice(
+                                    product, 'price', value);
+                              },
                             ),
                           ),
                           Text(
@@ -148,6 +194,13 @@ class ProductsScreen extends StatelessWidget {
                                   value.toInt(),
                                 );
                               },
+                              onChangeEnd: (value) {
+                                productController.saveNewProductQuantity(
+                                  product,
+                                  'quantity',
+                                  value.toInt(),
+                                );
+                              },
                             ),
                           ),
                           Text(
@@ -161,44 +214,10 @@ class ProductsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
+                )
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  SizedBox _buildAddNewProduct() {
-    return SizedBox(
-      height: 100,
-      child: Card(
-        color: Colors.black,
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Get.to(() => NewProductScreen());
-                },
-                icon: const Icon(
-                  Icons.add_circle,
-                  color: Colors.white,
-                ),
-              ),
-              const Text(
-                'Add a New Product',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
