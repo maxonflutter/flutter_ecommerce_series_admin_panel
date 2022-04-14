@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 class Product extends Equatable {
-  final int id;
+  final String? id;
   final String name;
   final String category;
   final String description;
@@ -15,7 +15,7 @@ class Product extends Equatable {
   int quantity;
 
   Product({
-    required this.id,
+    this.id,
     required this.name,
     required this.category,
     required this.description,
@@ -27,7 +27,7 @@ class Product extends Equatable {
   });
 
   @override
-  List<Object> get props {
+  List<Object?> get props {
     return [
       id,
       name,
@@ -42,7 +42,7 @@ class Product extends Equatable {
   }
 
   Product copyWith({
-    int? id,
+    String? id,
     String? name,
     String? category,
     String? description,
@@ -67,7 +67,6 @@ class Product extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'name': name,
       'category': category,
       'description': description,
@@ -81,7 +80,7 @@ class Product extends Equatable {
 
   factory Product.fromSnapshot(DocumentSnapshot snap) {
     return Product(
-      id: snap['id'],
+      id: snap.id,
       name: snap['name'],
       description: snap['description'],
       category: snap['category'],
@@ -100,7 +99,7 @@ class Product extends Equatable {
 
   static List<Product> products = [
     Product(
-      id: 1,
+      id: '1',
       name: 'Soft Drink #1',
       description:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
@@ -113,7 +112,7 @@ class Product extends Equatable {
       isPopular: false,
     ),
     Product(
-      id: 2,
+      id: '2',
       name: 'Soft Drink #2',
       description:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
@@ -126,7 +125,7 @@ class Product extends Equatable {
       isPopular: true,
     ),
     Product(
-      id: 3,
+      id: '3',
       name: 'Soft Drink #3',
       description:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
@@ -139,7 +138,7 @@ class Product extends Equatable {
       isPopular: true,
     ),
     Product(
-      id: 4,
+      id: '4',
       name: 'Smoothies #1',
       description:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
@@ -152,7 +151,7 @@ class Product extends Equatable {
       isPopular: false,
     ),
     Product(
-      id: 5,
+      id: '5',
       name: 'Smoothies #2',
       category: 'Smoothies',
       description:
