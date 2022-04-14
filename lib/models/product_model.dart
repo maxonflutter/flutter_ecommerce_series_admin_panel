@@ -67,6 +67,7 @@ class Product extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'category': category,
       'description': description,
@@ -123,45 +124,6 @@ class Product extends Equatable {
       quantity: 10,
       isRecommended: false,
       isPopular: true,
-    ),
-    Product(
-      id: '3',
-      name: 'Soft Drink #3',
-      description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      category: 'Soft Drinks',
-      imageUrl:
-          'https://images.unsplash.com/photo-1603833797131-3c0a18fcb6b1?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80', //https://unsplash.com/photos/5LIInaqRp5s
-      price: 2.99,
-      quantity: 10,
-      isRecommended: true,
-      isPopular: true,
-    ),
-    Product(
-      id: '4',
-      name: 'Smoothies #1',
-      description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      category: 'Smoothies',
-      imageUrl:
-          'https://images.unsplash.com/photo-1526424382096-74a93e105682?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80', //https://unsplash.com/photos/kcYXj4tBtes
-      price: 2.99,
-      quantity: 10,
-      isRecommended: true,
-      isPopular: false,
-    ),
-    Product(
-      id: '5',
-      name: 'Smoothies #2',
-      category: 'Smoothies',
-      description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-      imageUrl:
-          'https://images.unsplash.com/photo-1505252585461-04db1eb84625?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1552&q=80', //https://unsplash.com/photos/CrK843Pl9a4
-      price: 2.99,
-      quantity: 10,
-      isRecommended: false,
-      isPopular: false,
     ),
   ];
 }
